@@ -3,6 +3,7 @@ import User from "../Model/User.model.js";
 import { errorhandle } from "../utils/Error.js";
 import jwt from "jsonwebtoken"
 import cookie from "cookie-parser"
+
 export const Signup = async (req, res,next) => {
   try {
     const { fullname, email, password, profileImage, adminjoincode } = req.body;
@@ -109,3 +110,52 @@ export const userProfile =async(req,res,next)=>{
         },
     })
 }
+
+
+export const updateprofile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return next(errorhandle(404, "User Not Found"));
+    }
+
+    user.fullname = req.body.fullname || user.fullname;
+    user.email = req.body.email || user.email;
+
+    if (req.body.password) {
+      user.password = await bcrypt.hash(req.body.password, 10);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadimage = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return next(errorhandle(400, "No file upload"));
+    }
+
+    const imageurl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename}`;
+
+    res.status(200).json({
+      success: true,
+      imageurl
+    }); 
+  } catch (error) {
+    next(error);
+  }
+};
