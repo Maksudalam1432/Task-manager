@@ -65,9 +65,12 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
- 
-    const token = jwt.sign( {id:user._id}, process.env.SECRET_KEY, {expiresIn:"7d"})
-    res.cookie("access_token",token,{
+ console.log(user.role)
+ const token = jwt.sign(
+      { id: user._id, role:user.role },
+      process.env.SECRET_KEY,
+      { expiresIn: "7d" }
+    );    res.cookie("access_token",token,{
         httpOnly: true,
       
       maxAge: 7 * 24 * 60 * 60 * 1000,

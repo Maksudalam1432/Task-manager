@@ -4,6 +4,7 @@ import DBconnect from "./config/db.js";
 import cors from "cors";
 import authroute from "./route/user.route.js";
 import cookieParser from "cookie-parser";
+import route from "./route/users.route.js";
 dotenv.config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(
   })
 );
 app.use("/api/auth",authroute)
+app.use("/api/user",route)
 
 
 
