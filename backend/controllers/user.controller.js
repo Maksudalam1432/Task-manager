@@ -1,5 +1,6 @@
 import Task from "../Model/Task.model.js";
 import User from "../Model/User.model.js";
+import { errorhandle } from "../utils/Error.js";
 
 export const getusers = async (req, res, next) => {
   try {
@@ -39,3 +40,16 @@ export const getusers = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getuserbyid=async(req,res,next)=>{
+   try {
+    const user=await User.find(req.params._id).select("-password")
+
+    if(!user){
+       return next(errorhandle(404,"User Not Found"))
+    }
+    res.status(200).json(user)
+   } catch (error) {
+    return next(error)
+   }
+}
