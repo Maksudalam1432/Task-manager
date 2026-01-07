@@ -3,14 +3,14 @@ import dotenv from "dotenv";
 import DBconnect from "./config/db.js";
 import cors from "cors";
 import authroute from "./route/user.route.js";
-
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
 
 app.use(express.json())
 const PORT = process.env.PORT || 5000;
-
+app.use(cookieParser())
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -19,6 +19,8 @@ app.use(
   })
 );
 app.use("/api/auth",authroute)
+
+
 
 app.use(express.json());
 

@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
 import User from "../Model/User.model.js";
 import { errorhandle } from "../utils/Error.js";
-
+import jwt from "jsonwebtoken"
+import cookie from "cookie-parser"
 export const Signup = async (req, res,next) => {
   try {
     const { fullname, email, password, profileImage, adminjoincode } = req.body;
@@ -63,8 +64,48 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
+ 
+    const token = jwt.sign( {id:user._id}, process.env.SECRET_KEY, {expiresIn:"7d"})
+    res.cookie("access_token",token,{
+        httpOnly: true,
+      
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    res.status(200).json({
+        success:true,
+        message:"login sucessfully",
+        user:{
+            id:user._id,
+            fullname:user.fullname,
+            email:user.email,
+            role:user.role,
+            profileImage:user.profileImage
+
+        },
+    })
 
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const userProfile =async(req,res,next)=>{
+     const user=await User.findById(req.user.id)
+
+     if(!user){
+         return next(errorhandle(404,"User Not Found"))
+     }
+    res.status(200).json({
+        success:true,
+        
+        user:{
+            id:user._id,
+            fullname:user.fullname,
+            email:user.email,
+            role:user.role,
+            profileImage:user.profileImage
+
+        },
+    })
+}
