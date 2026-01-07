@@ -5,6 +5,7 @@ import cors from "cors";
 import authroute from "./route/user.route.js";
 import cookieParser from "cookie-parser";
 import route from "./route/users.route.js";
+import taskroute from "./route/Task.route.js";
 dotenv.config();
 
 const app = express();
@@ -21,6 +22,8 @@ app.use(
 );
 app.use("/api/auth",authroute)
 app.use("/api/user",route)
+app.use("/api/task",taskroute)
+
 
 
 
