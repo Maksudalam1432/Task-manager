@@ -1,34 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import React from 'react'
+import { Router,Route } from 'react-router-dom'
+import Login from './auth/Login'
+import Signup from './auth/Signup'
+import Privateroute from './routes/Privateroute'
+import Dashborad from './page/admin/Dashborad'
+import CreateTask from './page/admin/CreateTask'
+import ManageTask from './page/admin/ManageTask'
+import ManageUser from './page/admin/manageUser'
+import Userdaskboard from './page/user/Userdaskboard'
+import Taskdetails from './page/user/Taskdetails'
+import Mytask from './page/user/Mytask'
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+
+   <Router>
+
+   <Route path='"/login' element={<Login/>} />
+   <Route path='"/signuup' element={<Signup/>} />
+<Route  element={<Privateroute allowoRoles={["admin"]} />}>
+
+  
+ <Route path='/admin/daskboard' element={<Dashborad/>} />
+ <Route path='/admin/createtask' element={<CreateTask/>} />
+ <Route path='/managetask' element={<ManageTask/>} />
+ <Route path='/admin/manageuser' element={<ManageUser />} />
+</Route>
+ 
+ // USER//
+ <Route element={<Privateroute allowRoles ={["user"]} />}>
+   <Route path='/user/dashboard' element={<Userdaskboard/>} />
+   <Route path='/user/task-details:/id' element={<Taskdetails/>} />
+   <Route path='/user/tasks' element={<Mytask/>} />
+
+ </Route>
+   
+   </Router>
+     
+
+
+
+    </div>
   )
 }
 
