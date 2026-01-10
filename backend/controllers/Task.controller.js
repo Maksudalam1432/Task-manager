@@ -31,3 +31,13 @@ export const createtask = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const gettask=async(req,res,next)=>{
+
+  try {
+    
+  } catch (error) {
+    next(error)
+  }
+} 
